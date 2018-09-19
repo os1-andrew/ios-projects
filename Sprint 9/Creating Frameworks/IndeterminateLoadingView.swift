@@ -8,6 +8,27 @@
 
 import UIKit
 
+#if !swift(>=4.2)
+
+struct CAMediaTimingFunctionName: RawRepresentable {
+    let rawValue: String
+    
+    init?(rawValue: String) {
+        self.rawValue = rawValue
+    }
+    
+    static let easeIn = CAMediaTimingFunctionName(rawValue: kCAMediaTimingFunctionEaseIn)!
+    static let easeOut = CAMediaTimingFunctionName(rawValue: kCAMediaTimingFunctionEaseOut)!
+}
+
+extension CAMediaTimingFunction {
+    convenience init(name: CAMediaTimingFunctionName) {
+        self.init(name: name.rawValue)
+    }
+}
+
+#endif
+
 class IndeterminateLoadingView: UIView, CAAnimationDelegate {
 
     override init(frame: CGRect) {
@@ -86,6 +107,7 @@ class IndeterminateLoadingView: UIView, CAAnimationDelegate {
             shapeLayer.strokeStart = 0.0
             shapeLayer.strokeEnd = 1.0
             shapeLayer.removeAllAnimations()
+
             startAnimation(for: "strokeStart", timing: .easeOut)
         }
         
@@ -94,6 +116,7 @@ class IndeterminateLoadingView: UIView, CAAnimationDelegate {
             shapeLayer.strokeEnd = 0.0
             shapeLayer.removeAllAnimations()
             startAnimation(for: "strokeEnd", timing: .easeIn)
+            
         }
     }
     
